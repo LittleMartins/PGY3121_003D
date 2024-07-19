@@ -1,0 +1,320 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar</title>
+    <link rel="stylesheet" href="{% static 'css/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-B2pZeK/PZuL1DfGtnT+j9I4v3i1RczR6P2T4UmrToOo+UB1h19h9zrqrKDE5Od5S5upcfO1HEdI0Zb45qZpwSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="{% static 'imgs/logonav2.ico' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            max-width: 900px;
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        .card-header {
+            background-color:black;
+            color: #fff;
+            border-bottom: none;
+            border-radius: 12px 12px 0 0;
+            padding: 20px;
+        }
+        .card-header h5 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .card-body {
+            padding: 25px;
+            background: #ffffff;
+            border-radius: 0 0 12px 12px;
+        }
+        .formulario_devolucion {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+        .formulario_devolucion h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+        }
+        .formulario_devolucion label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 16px;
+        }
+        .formulario_devolucion input[type="text"],
+        .formulario_devolucion input[type="email"],
+        .formulario_devolucion textarea {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .formulario_devolucion textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .formulario_devolucion input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .formulario_devolucion input[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+        .mensaje-agradecimiento,
+        .mensaje-carrito-vacio {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            padding: 30px;
+            text-align: center;
+            z-index: 9999;
+            max-width: 90%;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .mensaje-agradecimiento p,
+        .mensaje-carrito-vacio p {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .mensaje-agradecimiento button,
+        .mensaje-carrito-vacio button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .mensaje-agradecimiento button:hover,
+        .mensaje-carrito-vacio button:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+        .card img {
+            border-radius: 8px;
+            max-width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+        .ver-mas-btn {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .ver-mas-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>Ñ
+    <p class="primero blink-text uppercase-text" style="margin-bottom: 0;">Envíos gratis por compras sobre $50.000</p>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black; margin-top: 0;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="{% static 'imgs/logonav2.png' %}" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'agregarproductos_lista' %}">Productos</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Info
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'quienes_somos' %}">Quiénes somos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'devolucion' %}">Devolución</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <a class="nav-link" href="{% url 'carrito' %}">
+                        <img src="{% static 'imgs/bolsasuper.png' %}" alt="Carrito de compras" style="width: 30px; height: 30px;">
+                    </a>
+                    <li class="nav-item">
+                        {% if user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <main class="container">
+        <h1 class="text-center mb-4">Proceso de Pago</h1>
+
+        <!-- Resumen del Carrito -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Resumen del Carrito</h5>
+            </div>
+            <div class="card-body">
+                <div id="productosCarrito">
+                    <!-- Aquí se insertarán los productos del carrito -->
+                </div>
+                <div class="mt-4">
+                    <h3>Total del Carrito: $<span id="totalCarrito">0.00</span></h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de Pago -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Detalles de Envío</h5>
+            </div>
+            <div class="card-body">
+                <form id="formPago" method="post" class="formulario_devolucion mx-auto">
+                    {% csrf_token %}
+                    {{ formenvios.as_p }}
+                    <input type="hidden" name="total" id="totalForm" value="0.00">
+                    <button type="submit" class="btn btn-primary">Confirmar Pago</button>
+                    <a href="{% url 'index' %}" class="ver-mas-btn">Volver al inicio</a>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Mensaje de Agradecimiento -->
+    <div id="mensajeAgradecimiento" class="mensaje-agradecimiento">
+        <p>¡Gracias por tu compra!</p>
+        <button id="verMasProductos">Ver Más Productos</button>
+    </div>
+
+    <!-- Mensaje de Carrito Vacío -->
+    <div id="mensajeCarritoVacio" class="mensaje-carrito-vacio">
+        <p>No hay productos en el carrito.</p>
+        <button id="verMasProductosCarritoVacio">Ver Más Productos</button>
+    </div>
+
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        // Función para actualizar el carrito
+        function actualizarCarrito() {
+            var productosCarrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            var totalCarrito = 0;
+            var contenedorProductos = document.getElementById('productosCarrito');
+            contenedorProductos.innerHTML = ''; // Limpiar el contenedor
+
+            if (productosCarrito.length === 0) {
+                document.getElementById('mensajeCarritoVacio').style.display = 'block';
+            } else {
+                document.getElementById('mensajeCarritoVacio').style.display = 'none';
+
+                productosCarrito.forEach(function(producto) {
+                    var productoElemento = document.createElement('div');
+                    productoElemento.className = 'producto-en-carrito mb-3';
+                    productoElemento.innerHTML = `
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <img src="${producto.imagen}" alt="${producto.nombre}" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-8">
+                                <h5>${producto.nombre}</h5>
+                                <p>Precio: $${producto.precio.toFixed(2)}</p>
+                                <p>Cantidad: ${producto.cantidad}</p>
+                                <button class="btn btn-danger btn-sm eliminar-producto" data-id="${producto.id}">Eliminar</button>
+                            </div>
+                        </div>
+                    `;
+                    contenedorProductos.appendChild(productoElemento);
+
+                    totalCarrito += producto.precio * producto.cantidad;
+                });
+
+                document.getElementById('totalCarrito').textContent = totalCarrito.toFixed(2);
+                document.getElementById('totalForm').value = totalCarrito.toFixed(2);
+
+                // Configurar botones de eliminar
+                document.querySelectorAll('.eliminar-producto').forEach(function(boton) {
+                    boton.addEventListener('click', function() {
+                        var idProducto = boton.getAttribute('data-id');
+                        eliminarDelCarrito(idProducto);
+                        actualizarCarrito(); // Actualizar el carrito después de eliminar
+                    });
+                });
+            }
+        }
+
+        // Función para eliminar producto del carrito
+        function eliminarDelCarrito(idProducto) {
+            var productosCarrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            productosCarrito = productosCarrito.filter(function(producto) {
+                return producto.id !== idProducto;
+            });
+            localStorage.setItem('carrito', JSON.stringify(productosCarrito));
+        }
+
+        // Mostrar el mensaje de agradecimiento si se ha realizado una compra
+        document.getElementById('formPago').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('mensajeAgradecimiento').style.display = 'block';
+        });
+
+        // Configurar botones de los mensajes
+        document.getElementById('verMasProductos').addEventListener('click', function() {
+            window.location.href = "{% url 'agregarproductos_lista' %}";
+        });
+
+        document.getElementById('verMasProductosCarritoVacio').addEventListener('click', function() {
+            window.location.href = "{% url 'agregarproductos_lista' %}";
+        });
+
+        // Inicializar el carrito
+        actualizarCarrito();
+    </script>
+    <script src="{% static 'js/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Code Street{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-B2pZeK/PZuL1DfGtnT+j9I4v3i1RczR6P2T4UmrToOo+UB1h19h9zrqrKDE5Od5S5upcfO1HEdI0Zb45qZpwSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="icon" href="{% static 'imgs/logonav2.ico' %}">
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <p class="primero blink-text uppercase-text" style="margin-bottom: 0;">Envíos gratis por compras sobre $50.000</p>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black; margin-top: 0;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'imgs/logonav2.png' %}" alt=""></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'agregarproductos_lista' %}">Productos</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Info
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'quienes_somos' %}">Quiénes somos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'devolucion' %}">Devolución</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        {% if user.is_authenticated and user.is_superuser %}
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Administrar
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                                <li><a class="dropdown-item" href="{% url 'agregarproductos_nuevo' %}">Agregar Producto</a></li>
+                            </ul>
+                        {% endif %}
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <a class="nav-link" href="{% url 'carrito' %}">
+                        <img src="{% static 'imgs/bolsasuper.png' %}" alt="Carrito de compras" style="width: 30px; height: 30px;">
+                    </a>
+                    <li class="nav-item">
+                        {% if user.is_authenticated %}
+                            <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+                        {% else %}
+                            <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Registrarse</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Productos</h1>
+        <div class="row">
+            {% for producto in productos %}
+            <div class="col-md-4">
+                <div class="card">
+                    {% if producto.imagen %}
+                        <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                    {% else %}
+                        <img src="{% static 'imgs/default_product_image.jpg' %}" class="card-img-top" alt="Imagen no disponible">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ producto.nombre }}</h5>
+                        <p class="card-text">{{ producto.descripcion }}</p>
+                        <p class="card-text">${{ producto.precio }}</p>
+                        <p class="card-text">Talla: {{ producto.get_talla_display }}</p>
+                        <button class="btn btn-success" onclick="agregarAlCarrito('{{ producto.id }}', '{{ producto.nombre }}', '{{ producto.precio }}', '{{ producto.imagen.url }}', '{{ producto.get_talla_display }}')">Añadir al Carrito</button>
+                        {% if user.is_authenticated and user.is_superuser %}
+                            <a href="{% url 'agregarproductos_editar' producto.id %}" class="btn btn-primary">Editar</a>
+                            <a href="{% url 'agregarproductos_confirmar_eliminar' producto.id %}" class="btn btn-danger">Eliminar</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'js/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+    function agregarAlCarrito(id, nombre, precio, imagen, talla) {
+        console.log(`Añadiendo producto al carrito: ID=${id}, Nombre=${nombre}, Precio=${precio}, Imagen=${imagen}, Talla=${talla}`);
+        let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        
+        // Buscar el producto en el carrito
+        let productoExistente = carrito.find(producto => producto.id === id);
+
+        if (productoExistente) {
+            // Si el producto ya existe en el carrito, incrementar la cantidad
+            productoExistente.cantidad += 1;
+        } else {
+            // Si el producto no existe, añadirlo al carrito
+            carrito.push({ id: id, nombre: nombre, precio: parseFloat(precio), imagen: imagen, talla: talla, cantidad: 1 });
+        }
+        
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        alert("Producto añadido al carrito");
+    }
+    </script>
+</body>
+</html>
